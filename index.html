@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>استوديو MH</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap"
     rel="stylesheet">
@@ -19,6 +20,7 @@
       --mustard: #d29a3c;
       --teal: #5f7a76;
       --line: #e4e1da;
+      --avatar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E");
     }
 
     * {
@@ -27,6 +29,11 @@
 
     html {
       scroll-behavior: smooth;
+    }
+
+    /* keeps section titles from hiding under the sticky top bar */
+    section[id] {
+      scroll-margin-top: 90px;
     }
 
     body {
@@ -55,7 +62,8 @@
       text-decoration: none;
     }
 
-    img {
+    img,
+    video {
       max-width: 100%;
       display: block;
     }
@@ -68,7 +76,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 22px 6vw;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px 6vw;
+      background: rgba(183, 182, 178, 0.85);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
     }
 
     .brand {
@@ -89,6 +102,7 @@
       border-radius: 999px;
       padding: 4px;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      max-width: 100%;
     }
 
     nav a {
@@ -99,6 +113,7 @@
       padding: 9px 20px;
       border-radius: 999px;
       display: inline-block;
+      white-space: nowrap;
     }
 
     nav a:hover {
@@ -114,6 +129,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      min-width: 0;
     }
 
     .tweet-head {
@@ -126,15 +142,8 @@
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      overflow: hidden;
       flex: none;
-      background: var(--line);
-    }
-
-    .tweet-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      background: var(--avatar) center / cover no-repeat, var(--line);
     }
 
     .tweet-names {
@@ -166,13 +175,11 @@
     }
 
     .tweet-text {
+      margin: 0;
       font-size: 0.9rem;
       line-height: 1.55;
       color: var(--ink);
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      overflow-wrap: anywhere;
     }
 
     .tweet-media {
@@ -190,6 +197,10 @@
       display: block;
     }
 
+    .tweet-media video {
+      background: #111;
+    }
+
     .tweet-media .badge {
       position: absolute;
       bottom: 8px;
@@ -199,44 +210,41 @@
       color: var(--ink);
       padding: 3px 8px;
       border-radius: 999px;
+      pointer-events: none;
     }
 
     .tweet-actions {
       display: flex;
       justify-content: space-between;
       padding-top: 10px;
+      margin-top: auto;
       border-top: 1px solid var(--line);
       color: var(--ink-soft);
     }
 
-    .tweet-actions .act {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.76rem;
+    .heart-btn {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      background: transparent;
+      padding: 5px;
+      cursor: pointer;
+      color: #e0245e;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
     }
 
-    .tweet-actions svg {
-      width: 16px;
-      height: 16px;
+    .heart-btn:hover {
+      background: rgba(224, 36, 94, .10);
+    }
+
+    .heart-btn svg {
+      width: 20px;
+      height: 20px;
       stroke: currentColor;
-      fill: none;
-      stroke-width: 1.7;
-    }
-
-    /* gallery variant: fixed media ratio, natural height */
-    .tweet-grid-item .tweet-media {
-      aspect-ratio: auto;
-    }
-
-    /* hero/flying variant: fills the stack, media grows to take remaining space */
-    .fly-card .tweet {
-      height: 100%;
-    }
-
-    .fly-card .tweet-media {
-      flex: 1;
-      min-height: 0;
+      fill: currentColor;
+      stroke-width: 1.5;
     }
 
     /* ================= HERO: flying posts ================= */
@@ -269,7 +277,7 @@
     .fly-stack {
       position: relative;
       width: min(90vw, 360px);
-      aspect-ratio: 360/430;
+      aspect-ratio: 360 / 430;
       flex: none;
     }
 
@@ -277,6 +285,7 @@
       position: absolute;
       inset: 0;
       opacity: 0;
+      pointer-events: none;
       animation-name: flyCycle;
       animation-duration: 16s;
       animation-iteration-count: infinite;
@@ -299,29 +308,57 @@
       animation-delay: 12s;
     }
 
+    /* hero cards: fixed-size stack, text clamped, media fills the rest */
+    .fly-card .tweet {
+      height: 100%;
+    }
+
+    .fly-card .tweet-text {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .fly-card .tweet-media {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .fly-card .tweet-media img,
+    .fly-card .tweet-media video {
+      height: 100%;
+      object-fit: cover;
+    }
+
     @keyframes flyCycle {
       0% {
         opacity: 0;
+        pointer-events: none;
         transform: translateY(60px) rotate(-4deg) scale(.92);
       }
 
       5% {
         opacity: 1;
+        pointer-events: auto;
         transform: translateY(0) rotate(0deg) scale(1);
       }
 
       13% {
         opacity: 1;
+        pointer-events: auto;
         transform: translateY(0) rotate(0deg) scale(1);
       }
 
       17% {
         opacity: 0;
+        pointer-events: none;
         transform: translateY(-60px) rotate(4deg) scale(.92);
       }
 
       100% {
         opacity: 0;
+        pointer-events: none;
       }
     }
 
@@ -333,10 +370,11 @@
 
       .fly-card:first-child {
         opacity: 1;
+        pointer-events: auto;
       }
     }
 
-    @media(max-width:760px) {
+    @media (max-width: 760px) {
       .hero {
         flex-direction: column;
       }
@@ -372,14 +410,20 @@
       box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
     }
 
-    /* ---------- tweet grid (works section) ---------- */
+    /* ---------- gallery: one Twitter-like card per row ---------- */
     .tweet-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 28px;
       padding: 30px 6vw 90px;
-      max-width: 1100px;
+      max-width: 720px;
       margin: 0 auto;
+    }
+
+    /* full text in the gallery (no clamp), media at its natural size */
+    .tweet-grid-item .tweet-text {
+      display: block;
+      overflow: visible;
     }
 
     /* ---------- why choose us section ---------- */
@@ -458,18 +502,26 @@
       margin-top: 14px;
     }
 
+    .plans-title {
+      max-width: 1040px;
+      margin: 40px auto 0;
+      padding: 0 6vw;
+      font-size: 1.4rem;
+    }
+
     .plans {
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      padding: 40px 6vw 20px;
-      max-width: 980px;
+      padding: 20px 6vw 20px;
+      max-width: 1040px;
       margin: 0 auto;
+      align-items: stretch;
     }
 
     .plan {
       border: 1px solid var(--line);
-      padding: 38px;
+      padding: 32px 28px;
       background: var(--paper);
       display: flex;
       flex-direction: column;
@@ -502,7 +554,8 @@
 
     .plan .price b {
       font-family: 'Cairo', sans-serif;
-      font-size: 3rem;
+      font-size: 2.8rem;
+      line-height: 1.1;
     }
 
     .plan .price span {
@@ -524,7 +577,7 @@
     }
 
     .plan ul li {
-      padding-right: 20px;
+      padding-inline-start: 22px;
       position: relative;
       font-size: 0.95rem;
     }
@@ -532,7 +585,7 @@
     .plan ul li::before {
       content: "—";
       position: absolute;
-      right: 0;
+      inset-inline-start: 0;
       color: var(--rust);
     }
 
@@ -540,32 +593,16 @@
       color: var(--mustard);
     }
 
-    .plan .cta {
-      margin-top: auto;
-      padding: 14px 18px;
-      text-align: center;
-      font-family: 'Cairo', sans-serif;
-      font-weight: 700;
-      border: 1px solid var(--ink);
-      cursor: pointer;
-      background: transparent;
-      font-size: 0.95rem;
-    }
-
-    .plan.main .cta {
-      background: var(--mustard);
-      color: var(--ink);
-      border-color: var(--mustard);
-    }
-
-    @media(max-width:900px) {
+    @media (max-width: 900px) {
       .plans {
         grid-template-columns: 1fr;
+        max-width: 520px;
       }
     }
 
+    /* ---------- contact ---------- */
     .contact {
-      margin: 40px auto 90px;
+      margin: 60px auto 90px;
       max-width: 980px;
       border: 1px solid var(--line);
       background: var(--paper);
@@ -577,10 +614,11 @@
       box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
     }
 
-    @media(max-width:900px) {
+    @media (max-width: 900px) {
       .contact {
         grid-template-columns: 1fr;
-        margin: 40px 6vw 90px;
+        margin: 60px 6vw 90px;
+        padding: 28px;
       }
     }
 
@@ -590,7 +628,7 @@
 
     .contact p {
       color: var(--ink-soft);
-      margin-top: 10px;
+      margin: 10px 0 0;
       font-size: 0.95rem;
     }
 
@@ -611,13 +649,6 @@
       color: var(--ink-soft);
     }
 
-    .tg-box .handle {
-      font-family: 'Cairo', sans-serif;
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: var(--ink);
-    }
-
     .tg-box .cta {
       text-align: center;
       padding: 12px;
@@ -636,18 +667,29 @@
       font-size: 0.82rem;
     }
 
-    @media(max-width:480px) {
+    /* ---------- small screens ---------- */
+    @media (max-width: 600px) {
       .topbar {
-        padding: 16px 5vw;
+        justify-content: center;
+        padding: 12px 4vw;
       }
 
       .brand {
         font-size: 1.1rem;
       }
 
+      nav {
+        gap: 2px;
+      }
+
       nav a {
-        padding: 8px 12px;
+        padding: 7px 11px;
         font-size: 0.82rem;
+      }
+
+      .section-intro h2,
+      .sub-hero h2 {
+        font-size: 1.5rem;
       }
 
       footer {
@@ -656,66 +698,6 @@
         text-align: center;
       }
     }
-
-    /* Requested: Twitter-like cards, one post per row */
-    .tweet-grid {
-      grid-template-columns: 1fr;
-      max-width: 720px;
-    }
-
-    .tweet-grid-item .tweet-media {
-      aspect-ratio: auto;
-    }
-
-    .tweet-grid-item .tweet-media img {
-      width: 100%;
-      height: auto;
-      max-height: none;
-      object-fit: contain;
-    }
-
-    .tweet-media video {
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-      background: #111;
-    }
-
-    .heart-btn {
-      width: 34px;
-      height: 34px;
-      border: 0;
-      background: transparent;
-      padding: 5px;
-      cursor: pointer;
-      color: #e0245e;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-    }
-
-    .heart-btn:hover {
-      background: rgba(224, 36, 94, .10);
-    }
-
-    .heart-btn svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      fill: currentColor;
-      stroke-width: 1.5;
-    }
-@media (max-width: 600px) {
-  nav {
-    font-size: 14px;   /* يصغر الخط */
-    gap: 10px;         /* يقلل المسافة بين الروابط */
-  }
-
-  nav a {
-    padding: 5px;      /* يقلل الحواف */
-  }
-}
-}
   </style>
 </head>
 
@@ -740,13 +722,10 @@
 
     <div class="fly-stack">
 
-
       <div class="fly-card">
         <article class="tweet">
           <div class="tweet-head">
-            <div class="tweet-avatar"><img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E"
-                alt=""></div>
+            <div class="tweet-avatar"></div>
             <div class="tweet-names"><b>Customer</b><span class="handle">@Customer</span></div>
             <span class="tweet-time">٣س</span>
           </div>
@@ -754,7 +733,7 @@
             الجيل الجديد من هواتف Huawei القابلة للطي بثلاثة أجزاء يقترب 👀📱<br>الشركة تستعد للكشف عن تفاصيل جديدة حول
             الجهاز، وسط توقعات بتصميم وتطويرات مثيرة مقارنة بالجيل السابق.<br>📅 انتظروا الكشف الرسمي في 7
             سبتمبر!<br>#Huawei #MateXT2 #HuaweiMateXT2</p>
-          <div class="tweet-media"><img src="MateXT 2.png" alt=""></div>
+          <div class="tweet-media"><img src="MateXT%202.png" alt=""></div>
           <div class="tweet-actions">
             <button class="heart-btn" aria-label="إعجاب" type="button">
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -769,9 +748,7 @@
       <div class="fly-card">
         <article class="tweet">
           <div class="tweet-head">
-            <div class="tweet-avatar"><img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E"
-                alt=""></div>
+            <div class="tweet-avatar"></div>
             <div class="tweet-names"><b>Customer</b><span class="handle">@Customer</span></div>
             <span class="tweet-time">٥س</span>
           </div>
@@ -792,9 +769,7 @@
       <div class="fly-card">
         <article class="tweet">
           <div class="tweet-head">
-            <div class="tweet-avatar"><img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E"
-                alt=""></div>
+            <div class="tweet-avatar"></div>
             <div class="tweet-names"><b>Customer</b><span class="handle">@Customer</span></div>
             <span class="tweet-time">٧س</span>
           </div>
@@ -834,16 +809,14 @@
   <!-- ================= GALLERY ================= -->
   <section id="gallery">
     <div class="section-intro">
-      <h2>عينة من الأعمال </h2>
+      <h2>عينة من الأعمال</h2>
     </div>
 
     <div class="tweet-grid">
 
       <article class="tweet tweet-grid-item">
         <div class="tweet-head">
-          <div class="tweet-avatar"><img
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E"
-              alt=""></div>
+          <div class="tweet-avatar"></div>
           <div class="tweet-names"><b>Customer</b><span class="handle">@Customer</span></div>
           <span class="tweet-time">١س</span>
         </div>
@@ -866,9 +839,7 @@
 
       <article class="tweet tweet-grid-item">
         <div class="tweet-head">
-          <div class="tweet-avatar"><img
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E"
-              alt=""></div>
+          <div class="tweet-avatar"></div>
           <div class="tweet-names"><b>Customer</b><span class="handle">@Customer</span></div>
           <span class="tweet-time">٣س</span>
         </div>
@@ -876,7 +847,7 @@
           الجيل الجديد من هواتف Huawei القابلة للطي بثلاثة أجزاء يقترب 👀📱<br>الشركة تستعد للكشف عن تفاصيل جديدة حول
           الجهاز، وسط توقعات بتصميم وتطويرات مثيرة مقارنة بالجيل السابق.<br>📅 انتظروا الكشف الرسمي في 7
           سبتمبر!<br>#Huawei #MateXT2 #HuaweiMateXT2</p>
-        <div class="tweet-media"><img src="MateXT 2.png" alt=""></div>
+        <div class="tweet-media"><img src="MateXT%202.png" alt=""></div>
         <div class="tweet-actions">
           <button class="heart-btn" aria-label="إعجاب" type="button">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -889,9 +860,7 @@
 
       <article class="tweet tweet-grid-item">
         <div class="tweet-head">
-          <div class="tweet-avatar"><img
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E"
-              alt=""></div>
+          <div class="tweet-avatar"></div>
           <div class="tweet-names"><b>Customer</b><span class="handle">@Customer</span></div>
           <span class="tweet-time">٥س</span>
         </div>
@@ -910,9 +879,7 @@
 
       <article class="tweet tweet-grid-item">
         <div class="tweet-head">
-          <div class="tweet-avatar"><img
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e4e1da'/%3E%3Ccircle cx='50' cy='38' r='18' fill='%235c5850'/%3E%3Cpath d='M20 86c3-20 15-30 30-30s27 10 30 30' fill='%235c5850'/%3E%3C/svg%3E"
-              alt=""></div>
+          <div class="tweet-avatar"></div>
           <div class="tweet-names"><b>Customer</b><span class="handle">@Customer</span></div>
           <span class="tweet-time">٧س</span>
         </div>
@@ -966,23 +933,27 @@
 
       <div class="why-card">
         <div class="why-icon">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <polyline points="20 6 9 17 4 12" />
-</svg>
+          <svg viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
         <h3>محتوى خالٍ من المحرمات بإذن الله</h3>
         <p>قطع أي مشاهد تظهر فيها عراة أو ما لا يوافق الشريعة الإسلامية قدر الإمكان بإذن الله</p>
       </div>
-
-
+    </div>
   </section>
 
+  <!-- ================= SUBSCRIPTIONS ================= -->
   <section id="subs">
     <div class="sub-hero">
-      <h2>باقات الاشتراك الشهرية (متاح الدفع بعملة بلدك إذا أردت)</h2>
+      <h2>باقات الاشتراك</h2>
+      <p>متاح الدفع بعملة بلدك إذا أردت</p>
     </div>
+
+    <!-- Monthly -->
+    <h3 class="plans-title">الاشتراك الشهري</h3>
     <div class="plans">
-      <div class="plan main">
+      <div class="plan">
         <div class="k">الباقة البدائية</div>
         <div class="price"><b>50$</b><span>/ شهريًا</span></div>
         <ul>
@@ -990,7 +961,7 @@
           <li>سرعة معتدلة في نقل الخبر</li>
         </ul>
       </div>
-    <div class="plans">
+
       <div class="plan main">
         <div class="k">الباقة الأساسية</div>
         <div class="price"><b>100$</b><span>/ شهريًا</span></div>
@@ -1000,8 +971,7 @@
         </ul>
       </div>
 
-    <div class="plans">
-      <div class="plan main">
+      <div class="plan">
         <div class="k">الباقة المتميزة</div>
         <div class="price"><b>150$</b><span>/ شهريًا</span></div>
         <ul>
@@ -1009,12 +979,12 @@
           <li>سرعة عالية جدًا في نقل الحدث ومتابعة شاملة لجميع المصادر لضمان الوصول في أسرع وقت للخبر</li>
         </ul>
       </div>
-  <section id="subs">
-    <div class="sub-hero">
-      <h2>(متاح الدفع بعملة بلدك إذا أردت) باقات الاشتراك الأسبوعية</h2>
     </div>
+
+    <!-- Weekly -->
+    <h3 class="plans-title">الاشتراك الأسبوعي</h3>
     <div class="plans">
-      <div class="plan main">
+      <div class="plan">
         <div class="k">الباقة البدائية</div>
         <div class="price"><b>13$</b><span>/ أسبوعيًا</span></div>
         <ul>
@@ -1022,7 +992,7 @@
           <li>سرعة معتدلة في نقل الخبر</li>
         </ul>
       </div>
-    <div class="plans">
+
       <div class="plan main">
         <div class="k">الباقة الأساسية</div>
         <div class="price"><b>28$</b><span>/ أسبوعيًا</span></div>
@@ -1032,8 +1002,7 @@
         </ul>
       </div>
 
-    <div class="plans">
-      <div class="plan main">
+      <div class="plan">
         <div class="k">الباقة المتميزة</div>
         <div class="price"><b>40$</b><span>/ أسبوعيًا</span></div>
         <ul>
@@ -1041,26 +1010,26 @@
           <li>سرعة عالية جدًا في نقل الحدث ومتابعة شاملة لجميع المصادر لضمان الوصول في أسرع وقت للخبر</li>
         </ul>
       </div>
+    </div>
 
+    <!-- Contact -->
     <div class="contact">
       <div>
         <h3>للاشتراك تواصل معنا</h3>
         <p>محتوانا تقني بالكامل. للاشتراك في الباقة الأساسية أو الاستفسار عن باقة مخصصة، راسلنا مباشرة على تيليجرام —
           نرسل لك منشورات الأسبوع أولًا، وتدفع بعد استلامها.</p>
       </div>
-      <a href="https://t.me/MstrHCC" target="_blank">
+      <a href="https://t.me/MstrHCC" target="_blank" rel="noopener">
         <div class="tg-box">
           <div class="row"><span>تيليجرام</span><span>اضغط للتواصل</span></div>
           <div class="cta">فتح محادثة تيليجرام</div>
         </div>
       </a>
-
     </div>
   </section>
 
   <footer>
-    <span>استوديو (MstrH) © 2026</span>
-    <span>جميع الأسعار أسبوعية ما لم يُذكر غير ذلك</span>
+    <span>استوديو (MH) © 2026</span>
   </footer>
 
 
