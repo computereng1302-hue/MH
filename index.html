@@ -643,6 +643,33 @@
       font-size: 0.95rem;
     }
 
+    /* ---------- payment-terms notes ---------- */
+    .pay-note-wrap {
+      max-width: 1040px;
+      margin: 10px auto 0;
+      padding: 0 6vw;
+    }
+
+    .pay-note {
+      display: inline-block;
+      padding: 8px 16px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      line-height: 1.4;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .pay-note.highlight {
+      background: var(--rust);
+      border-color: var(--rust);
+      color: #fff;
+      font-size: 1.15rem;
+      padding: 10px 20px;
+    }
+
     /* ---------- contact ---------- */
     .contact {
       margin: 60px auto 90px;
@@ -983,6 +1010,17 @@
         <h3>محتوى خالٍ من المحرمات بإذن الله</h3>
         <p>قطع أي مشاهد تظهر فيها عراة أو ما لا يوافق الشريعة الإسلامية قدر الإمكان بإذن الله</p>
       </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="6" width="20" height="13" rx="2" />
+            <path d="M2 10h20M6 15h4" />
+          </svg>
+        </div>
+        <h3>ادفع بعد ما تستلم</h3>
+        <p>في الاشتراك الأسبوعي: نرسل لك المنشورات أولًا وتدفع بعد استلامها. وفي الاشتراك الشهري يصبح الدفع بعد الاستلام للعملاء المعروفين بعد شهرين معنا.</p>
+      </div>
     </div>
   </section>
 
@@ -999,8 +1037,45 @@
       </div>
     </div>
 
+    <!-- Weekly -->
+    <h3 class="plans-title">الاشتراك الأسبوعي</h3>
+    <div class="pay-note-wrap">
+      <span class="pay-note highlight">الدفع بعد الاستلام</span>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <div class="k">الباقة البدائية</div>
+        <div class="price"><b>15$</b><span>/ أسبوعيًا</span></div>
+        <ul>
+          <li>تغطية متوسطة للاخبار التقنية المهمة فقط</li>
+          <li>سرعة معتدلة في نقل الخبر</li>
+        </ul>
+      </div>
+
+      <div class="plan main">
+        <div class="k">الباقة الأساسية</div>
+        <div class="price"><b>30$</b><span>/ أسبوعيًا</span></div>
+        <ul>
+          <li>تغطية كبيرة للاخبار التقنية</li>
+          <li>سرعة متوسطة في نقل الحدث</li>
+        </ul>
+      </div>
+
+      <div class="plan">
+        <div class="k">الباقة المتميزة</div>
+        <div class="price"><b>43$</b><span>/ أسبوعيًا</span></div>
+        <ul>
+          <li>تغطية شاملة للاخبار التقنية مع اخبار استثنائية قدر الإمكان</li>
+          <li>سرعة عالية جدًا في نقل الحدث ومتابعة شاملة لجميع المصادر لضمان الوصول في أسرع وقت للخبر</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- Monthly -->
     <h3 class="plans-title">الاشتراك الشهري</h3>
+    <div class="pay-note-wrap">
+      <span class="pay-note">الدفع مقدمًا — والدفع بعد الاستلام للعملاء المعروفين (بعد شهرين معنا)</span>
+    </div>
     <div class="plans">
       <div class="plan">
         <div class="k">الباقة البدائية</div>
@@ -1030,43 +1105,12 @@
       </div>
     </div>
 
-    <!-- Weekly -->
-    <h3 class="plans-title">الاشتراك الأسبوعي</h3>
-    <div class="plans">
-      <div class="plan">
-        <div class="k">الباقة البدائية</div>
-        <div class="price"><b>15$</b><span>/ أسبوعيًا</span></div>
-        <ul>
-          <li>تغطية متوسطة للاخبار التقنية المهمة فقط</li>
-          <li>سرعة معتدلة في نقل الخبر</li>
-        </ul>
-      </div>
-
-      <div class="plan main">
-        <div class="k">الباقة الأساسية</div>
-        <div class="price"><b>28$</b><span>/ أسبوعيًا</span></div>
-        <ul>
-          <li>تغطية كبيرة للاخبار التقنية</li>
-          <li>سرعة متوسطة في نقل الحدث</li>
-        </ul>
-      </div>
-
-      <div class="plan">
-        <div class="k">الباقة المتميزة</div>
-        <div class="price"><b>40$</b><span>/ أسبوعيًا</span></div>
-        <ul>
-          <li>تغطية شاملة للاخبار التقنية مع اخبار استثنائية قدر الإمكان</li>
-          <li>سرعة عالية جدًا في نقل الحدث ومتابعة شاملة لجميع المصادر لضمان الوصول في أسرع وقت للخبر</li>
-        </ul>
-      </div>
-    </div>
-
     <!-- Contact -->
     <div class="contact">
       <div>
         <h3>للاشتراك تواصل معنا</h3>
         <p>محتوانا تقني بالكامل. للاشتراك في الباقة الأساسية أو الاستفسار عن باقة مخصصة، راسلنا مباشرة على تيليجرام —
-          نرسل لك منشورات الأسبوع أولًا، وتدفع بعد استلامها.</p>
+          الاشتراك الأسبوعي: نرسل لك منشورات الأسبوع أولًا، وتدفع بعد استلامها. الاشتراك الشهري: يُدفع مقدمًا، ويصبح الدفع بعد الاستلام للعملاء المعروفين بعد مرور شهرين معنا.</p>
         <span class="contact-currency">تقدر تدفع بعملة بلدك</span>
       </div>
       <a href="https://t.me/MstrHCC" target="_blank" rel="noopener">
